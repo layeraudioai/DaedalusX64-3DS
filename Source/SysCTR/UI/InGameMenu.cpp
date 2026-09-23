@@ -23,6 +23,7 @@
 #include "System/System.h"
 #include "Test/BatchTest.h"
 #include "Utility/IO.h"
+#include "Utility/FramerateLimiter.h"
 #include "Utility/Preferences.h"
 #include "Utility/Profiler.h"
 #include "Utility/Thread.h"
@@ -191,10 +192,10 @@ bool UI::DrawOptionsPage(RomID mRomID)
 
 		ImGui::Spacing();
 
-		ImGui::Text("Limit Framerate");
-		ImGui::Checkbox("##speedsync", (bool*)&romPreferences.SpeedSyncEnabled);
-		ImGui::SameLine();
-		ImGui::Text(romPreferences.SpeedSyncEnabled ? "Enabled" : "Disabled");
+		ImGui::Text("Framerate Cap: Removed");
+		ImGui::Text("Adaptive performance: %.2fx", FramerateLimiter_GetPerformanceScale());
+		ImGui::Text("Guest clock: %llu Hz", (unsigned long long)FramerateLimiter_GetTargetClockRateHz());
+		ImGui::Text("Host estimate: %llu Hz", (unsigned long long)FramerateLimiter_GetHostClockRateHz());
 
 		ImGui::EndTabItem();
 	}

@@ -26,8 +26,11 @@ extern u32		gSpeedSyncEnabled;
 
 bool			FramerateLimiter_Reset();
 void			FramerateLimiter_Limit();
-f32				FramerateLimiter_GetSync();	// Returns fraction of real n64 we're running at (1 = 100%)
+f32				FramerateLimiter_GetSync();	// Measured guest/host frame-rate ratio.
 u32				FramerateLimiter_GetTvFrequencyHz();
+f32				FramerateLimiter_GetPerformanceScale();
+u64				FramerateLimiter_GetTargetClockRateHz();
+u64				FramerateLimiter_GetHostClockRateHz();
 
 // Override the sync function, e.g. if the audio plugin wants to control sync.
 typedef void (*FramerateSyncFn)(void * arg);
