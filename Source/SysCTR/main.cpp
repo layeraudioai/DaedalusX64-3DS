@@ -96,10 +96,12 @@ static void Initialize()
 	
 	gfxInit(GSP_BGR8_OES, GSP_BGR8_OES, true);
 
-	if(isN3DS)
-		gfxSetWide(true);
+	// Put the top LCD into stereoscopic mode. libctru treats wide and stereo
+	// modes as mutually exclusive; enabling stereo here intentionally gives
+	// the 3D display mode priority over New 3DS wide mode.
+	gfxSet3D(true);
 	
-	pglInitEx(0x080000, 0x040000);
+	pglInit();
 
 	strcpy(gDaedalusExePath, DAEDALUS_CTR_PATH(""));
 	strcpy(g_DaedalusConfig.mSaveDir, DAEDALUS_CTR_PATH("SaveGames/"));

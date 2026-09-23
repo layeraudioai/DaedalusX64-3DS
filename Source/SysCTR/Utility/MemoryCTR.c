@@ -1,4 +1,3 @@
-
 // Taken from PicoDrive's libretro implementation for 3DS.
 #include <3ds.h>
 #include <stdio.h>
@@ -42,8 +41,8 @@ static void ctrEnableAllServices(void)
 int _SetMemoryPermission(void *buffer, int size, int permission)
 {
 	unsigned int currentHandle;
-	svcDuplicateHandle(&currentHandle, 0xFFFF8001);
-	int res = svcControlProcessMemory(currentHandle, buffer, 0, size, MEMOP_PROT, permission);
+	svcDuplicateHandle((Handle *)currentHandle, 0xFFFF8001);
+	int res = svcControlProcessMemory(currentHandle, (u32)buffer, 0, size, MEMOP_PROT, permission);
 	svcCloseHandle(currentHandle);
 
 	return res;
@@ -58,8 +57,8 @@ int _SetMemoryPermission(void *buffer, int size, int permission)
 //-----------------------------------------------------------------------------
 int _InitializeSvcHack(void)
 {
-		svcBackdoor((ctr_callback_type)ctrEnableAllServices);
-		svcBackdoor((ctr_callback_type)ctrEnableAllServices);
+
+		svcBackdoor((s32 (*) (void)) ctrEnableAllServices);
 
 #if 0
 		printf("svc_access_control: %x %x %x %x\n", s0, s1, s2, s3);

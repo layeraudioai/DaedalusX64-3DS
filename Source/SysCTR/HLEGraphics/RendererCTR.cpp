@@ -732,28 +732,33 @@ void RendererCTR::TexRectFlip(u32 tile_idx, const v2 & xy0, const v2 & xy1, TexC
 
 	p_vertices[0].Position.x = screen0.x;
 	p_vertices[0].Position.y = screen0.y;
-	p_vertices[0].Position.z = 0.0f;
+	// TexRectFlip uses the same RDP primitive-depth source as TexRect. Keeping
+	// this at zero made flipped textured rectangles fail depth comparisons when
+	// the game selected primitive depth.
+	const f32 depth = gRDPOtherMode.depth_source ? mPrimDepth : 0.0f;
+
+	p_vertices[0].Position.z = depth;
 	p_vertices[0].Colour = c32(0xffffffff);
 	p_vertices[0].Texture.x = uv0.x * scale_x;
 	p_vertices[0].Texture.y = uv0.y * scale_y;
 
 	p_vertices[1].Position.x = screen1.x;
 	p_vertices[1].Position.y = screen0.y;
-	p_vertices[1].Position.z = 0.0f;
+	p_vertices[1].Position.z = depth;
 	p_vertices[1].Colour = c32(0xffffffff);
 	p_vertices[1].Texture.x = uv0.x * scale_x;
 	p_vertices[1].Texture.y = uv1.y * scale_y;
 
 	p_vertices[2].Position.x = screen0.x;
 	p_vertices[2].Position.y = screen1.y;
-	p_vertices[2].Position.z = 0.0f;
+	p_vertices[2].Position.z = depth;
 	p_vertices[2].Colour = c32(0xffffffff);
 	p_vertices[2].Texture.x = uv1.x * scale_x;
 	p_vertices[2].Texture.y = uv0.y * scale_y;
 
 	p_vertices[3].Position.x = screen1.x;
 	p_vertices[3].Position.y = screen1.y;
-	p_vertices[3].Position.z = 0.0f;
+	p_vertices[3].Position.z = depth;
 	p_vertices[3].Colour = c32(0xffffffff);
 	p_vertices[3].Texture.x = uv1.x * scale_x;
 	p_vertices[3].Texture.y = uv1.y * scale_y;

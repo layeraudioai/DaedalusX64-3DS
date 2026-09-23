@@ -23,3 +23,5 @@ rom.db
 .svn/
 Source/tmp
 Source/build
+Tools/makerom.exe
+Tools/3dsxtool.exe
