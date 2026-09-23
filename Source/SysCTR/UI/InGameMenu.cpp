@@ -275,6 +275,96 @@ bool UI::DrawOptionsPage(RomID mRomID)
 		ImGui::SameLine();
 		ImGui::Text(gGlobalPreferences.DisplayFramerate ? "Enabled" : "Disabled");
 
+		
+		ImGui::Spacing();
+
+		// Cheats
+		ImGui::Text("Enable Cheats");
+		ImGui::Checkbox("##EnableCheats", &romPreferences.CheatsEnabled);
+		ImGui::SameLine();
+		ImGui::Text(romPreferences.CheatsEnabled ? "Enabled" : "Disabled");
+
+		if (romPreferences.CheatsEnabled)
+		{
+			ImGui::Text("Cheats");
+			RomSettings settings;
+			std::string mRomName;
+			if (CRomSettingsDB::Get()->GetSettings(mRomID, &settings))
+			{
+				mRomName = settings.GameName;
+			}
+			// ImGui::Text(mRomName.c_str());
+
+			// show cheats dropdown
+			CheatCodes_Read(mRomName.c_str(), "Daedalus.cht", mRomID.CountryID);
+
+			// Loaded Cheats
+			ImGui::Text("Loaded Cheats");
+			if (codegroupcount > 0)
+			{
+				char *empt = strdup("");
+				char *cheatNames[codegroupcount] = {empt};
+				char *unloadedCheatNames[codegroupcount] = {empt};
+				int numCheats = 0;
+
+				for (u32 i = 0; i < codegroupcount; ++i)
+				{
+					std::string cheatStr = std::to_string(i) + ". " + codegrouplist[i].name + " - " + codegrouplist[i].note;
+					if (codegrouplist[i].active)
+					{
+						cheatNames[i] = strdup(cheatStr.c_str());
+						numCheats++;
+					}
+					else
+					{
+						unloadedCheatNames[i] = strdup(cheatStr.c_str());
+					}
+				}
+
+				int selectedCheat = -1;
+				ImGui::Combo("##cheat_list", &selectedCheat, cheatNames, numCheats); // Display up to 5 cheats at once
+
+				// Toggle Cheat Status
+				if (selectedCheat != -1)
+				{
+					codegrouplist[selectedCheat].active = false;
+					CheatCodes_Disable(selectedCheat);
+					selectedCheat = -1;
+				}
+
+				// unslelected cheats
+				int unSelectedCheat = -1;
+				ImGui::Combo("##unselected_cheat_list", &unSelectedCheat, unloadedCheatNames, codegroupcount - numCheats); // Display up to 5 cheats at once
+
+				// Toggle Cheat Status
+				if (unSelectedCheat != -1)
+				{
+					codegrouplist[unSelectedCheat].active = true;
+					CheatCodes_Apply(unSelectedCheat, IN_GAME);
+					unSelectedCheat = -1;
+				}
+
+				char str[10];
+				ImGui::Text(itoa(numCheats, str, 10));
+				char str2[10];
+				ImGui::Text(itoa(codegroupcount - numCheats, str2, 10));
+
+				// Free allocated strings (IMPORTANT!)
+				/*for (int i = 0; i < numCheats; ++i)
+				{
+					free(cheatNames[i]);
+				}
+				for (int i = 0; i < codegroupcount - numCheats; ++i)
+				{
+					free(unloadedCheatNames[i]);
+				}*/
+			}
+			else
+			{
+				ImGui::Text("No cheats found.");
+			}
+		}
+
 		ImGui::EndTabItem();
 	}
 
