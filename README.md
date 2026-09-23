@@ -3,11 +3,13 @@
 DaedalusX64 is a Nintendo 64 emulator for 3DS, Linux, PSP, PS Vita among other platforms. The PSP port is noteworthy for being the fastest N64 emulator ever on the platform, achieving close to or even full speed in many titles.
  
 ## Usage
- 
-To install Daedalus to your 3DS, download the latest release from the Releases page: https://github.com/MasterFeizz/daedalusX64-3DS/releases
- 
-Next, extract the data.zip to the root of your sd card. Place your ROM files in sdmc:/3ds/DaedalusX64/Roms/ and they will automatically appear in Daedalus.
- 
+
+To install daedalusx64 rom packs on your nintendo -6-4- err 3ds place them in source/sysctr/resources/romfs/ with the dspfirm.cdc and the existing font
+then rebuild the romfs.bin
+then build
+
+the 3dsx doesnt need rebuilding romfs.bin
+
 ## Credits
 
 - cmf028: Major contributer of the ARM DynaRec code
